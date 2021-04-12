@@ -3,17 +3,25 @@ void boot::c_conf::setup()
 {
 	uvirt;
 	const auto did_load = this->load();
-	util::c_log::Instance().duo(XorStr("[ base config load result > %s ]\n"), did_load ? "ok" : "failed");
+	dbglog(XorStr("[ base config load result > %s ]\n"), did_load ? XorStr("ok") : XorStr("failed"));
 	if (!did_load)
 	{
 		//set data dir
-		const LPSTR self_name = {};
-		GetModuleFileNameA(GetModuleHandleA(0), self_name, MAX_PATH);
-		this->base_config.data_dir = self_name;
+		this->base_config = {};
+		
+		TCHAR buffer[MAX_PATH] = { 0 };
+		GetModuleFileName(NULL, buffer, MAX_PATH);
+
+		this->base_config.data_dir = buffer;
+		const auto last_dir_slash = this->base_config.data_dir.find_last_of('\\');
+		if (last_dir_slash != std::string::npos) this->base_config.data_dir.erase(last_dir_slash, this->base_config.data_dir.size());
 	}
+	dbglogw(XorStrW(L"[ data dir: %s ]\n"), this->base_config.data_dir.c_str());
 	//always rand
 	this->base_config.ipc_comkey = randstr(64);
-	this->base_config.ipc_port = randint(9999);
+	this->base_config.ipc_port = std::to_string(randint(9999));
+	dbglog(XorStr("[ ipc key : %s ]\n"), this->base_config.ipc_comkey.c_str());
+	dbglog(XorStr("[ ipc port: %s ]\n"), this->base_config.ipc_port.c_str());
 	this->save();
 	vmend;
 }

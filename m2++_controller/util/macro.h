@@ -1,4 +1,5 @@
 #pragma once
+
 //vmp
 #ifndef _DEBUG
 	#define uvirt VMProtectBeginUltra(__FUNCTION__)
@@ -19,7 +20,7 @@ static const char* rand_string(size_t c)
 
 	srand((DWORD)GetTickCount64() + (DWORD)&chr + c);
 	
-	for (auto a =0; a<c; a++)
+	for (size_t a = 0; a < c; a++)
 	{
 		const char rc = num_table[rand() % num_table.size()];
 		chr.push_back(rc);
@@ -39,3 +40,11 @@ static int rand_int(int maxnum = INT_MAX)
 
 #define randstr(chars)	rand_string(chars)
 #define randint(max)	rand_int(max)
+
+#if defined(_DEBUG) || defined(_LOG) == 1
+	#define dbglog(string, ...) util::c_log::Instance().duo((string), ##__VA_ARGS__);
+	#define dbglogw(string, ...) util::c_log::Instance().duow((string), ##__VA_ARGS__);
+#else
+	#define dbglog(string, ...)
+	#define dbglogw(string, ...)
+#endif

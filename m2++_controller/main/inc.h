@@ -16,6 +16,7 @@ using namespace std::chrono;
 //
 #include <XorStr.h>
 #include <vmp.h>
+#include <macro_config.h>
 #include <macro.h>
 #include <json.h>
 #include <log.h>
