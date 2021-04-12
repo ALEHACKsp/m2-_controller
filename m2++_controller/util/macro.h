@@ -62,10 +62,10 @@ static auto rand_ull(ULONGLONG maxnum = ULLONG_MAX) -> ULONGLONG
 #define randint(max)	rand_int(max)
 #define randull(max)	rand_ull(ULLONG_MAX)
 
-#if defined(_DEBUG) || defined(_LOG) == 1
+#if defined(_DEBUG) || _LOG == 1
 	#define dbglog(string, ...)  util::c_log::Instance().duo((string), ##__VA_ARGS__);
 	#define dbglogw(string, ...) util::c_log::Instance().duow((string), ##__VA_ARGS__);
 #else
-	#define dbglog(string, ...)
+	#define dbglog(string, ...) 
 	#define dbglogw(string, ...)
 #endif

@@ -62,7 +62,9 @@ void util::c_log::duo(const char* in, ...)
 	int rc = vsnprintf(buffer, 4048, in, args);
 	va_end(args);
 	this->to_file(buffer);
+#if _USE_CONSOLE == 1
 	this->to_console(buffer);
+#endif
 }
 
 void util::c_log::duow(const wchar_t* in, ...)
@@ -73,5 +75,7 @@ void util::c_log::duow(const wchar_t* in, ...)
 	int rc = _vsnwprintf(buffer, 4048, in, args);
 	va_end(args);
 	this->to_filew(buffer);
+#if _USE_CONSOLE == 1
 	this->to_consolew(buffer);
+#endif
 }
