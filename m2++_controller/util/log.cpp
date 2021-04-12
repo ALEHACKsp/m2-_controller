@@ -20,7 +20,7 @@ void util::c_log::to_file(const char* in)
 	this->fstream << in;
 	this->fstream.close();
 }
-void util::c_log::to_filew(const wchar_t* in)
+void util::c_log::to_filew(const wchar_t* in) const
 {
 	std::wofstream fstream(this->log_file, std::ios::app);
 	if (!fstream.is_open()) return;

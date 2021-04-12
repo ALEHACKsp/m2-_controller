@@ -8,12 +8,18 @@
 #endif
 
 #ifndef _DEBUG
+	#define mut VMProtectBeginMutation(__FUNCTION__)
+#else
+	#define mut
+#endif
+
+#ifndef _DEBUG
 	#define vmend VMProtectEnd()
 #else
 	#define vmend
 #endif
 
-static const char* rand_string(size_t c)
+static auto rand_string(size_t c) -> const char*
 {
 	std::string num_table = XorStr("ABCDEFGHIJKLMNOPQRSTUVXYZabcdefhijklmnopqrstuvwxyz0123456789");
 	std::string chr;
@@ -28,7 +34,8 @@ static const char* rand_string(size_t c)
 
 	return chr.c_str();
 }
-static int rand_int(int maxnum = INT_MAX)
+
+static auto rand_int(int maxnum = INT_MAX) -> int
 {
 	auto ret = 0;
 
@@ -42,7 +49,7 @@ static int rand_int(int maxnum = INT_MAX)
 #define randint(max)	rand_int(max)
 
 #if defined(_DEBUG) || defined(_LOG) == 1
-	#define dbglog(string, ...) util::c_log::Instance().duo((string), ##__VA_ARGS__);
+	#define dbglog(string, ...)  util::c_log::Instance().duo((string), ##__VA_ARGS__);
 	#define dbglogw(string, ...) util::c_log::Instance().duow((string), ##__VA_ARGS__);
 #else
 	#define dbglog(string, ...)

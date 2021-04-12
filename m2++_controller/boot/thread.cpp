@@ -19,7 +19,7 @@ void boot::c_thread::setup()
 		boot::thread_ext::setup();
 	});
 	std::thread(this->core).join();
-	util::c_log::Instance().duo(XorStr("[ boot executed ]\n"));
+	dbglog(XorStr("[ boot executed ]\n"));
 	vmend;
 }
 
@@ -39,7 +39,7 @@ void boot::c_thread::work()
 			}
 			catch (std::exception &e)
 			{
-				util::c_log::Instance().duo(XorStr("[ function %04x has failed => %s ]\n"), (uint32_t)&obj->func, e.what());
+				dbglog(XorStr("[ function %04x has failed => %s ]\n"), (uint32_t)&obj->func, e.what());
 			}
 		}
 		std::this_thread::sleep_for(10ms);

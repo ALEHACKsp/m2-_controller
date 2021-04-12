@@ -10,7 +10,7 @@ namespace util
 		void			to_console(const char* in);
 		void			to_consolew(const wchar_t* in);
 		void			to_file(const char* in);
-		void			to_filew(const wchar_t* in);
+		void			to_filew(const wchar_t* in) const;
 	public:
 		void			setup();
 		const char*		string(const char* in, ...);

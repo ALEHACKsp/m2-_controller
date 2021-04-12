@@ -3,7 +3,7 @@ void boot::c_conf::setup()
 {
 	uvirt;
 	const auto did_load = this->load();
-	dbglog(XorStr("[ base config load result > %s ]\n"), did_load ? XorStr("ok") : XorStr("failed"));
+	dbglog(XorStr("[ base config load result > %s ]\n"), did_load ? XorStr("ok") : XorStr("not available"));
 	if (!did_load)
 	{
 		//set data dir
@@ -13,13 +13,41 @@ void boot::c_conf::setup()
 		GetModuleFileName(NULL, buffer, MAX_PATH);
 
 		this->base_config.data_dir = buffer;
+
 		const auto last_dir_slash = this->base_config.data_dir.find_last_of('\\');
 		if (last_dir_slash != std::string::npos) this->base_config.data_dir.erase(last_dir_slash, this->base_config.data_dir.size());
 	}
 	dbglogw(XorStrW(L"[ data dir: %s ]\n"), this->base_config.data_dir.c_str());
 	//always rand
 	this->base_config.ipc_comkey = randstr(64);
-	this->base_config.ipc_port = std::to_string(randint(9999));
+	
+	WSADATA wsaData;
+	if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) dbglog(XorStr("[ failed opening WSAStartup ]\n"));
+	
+	while (true)
+	{
+		this->base_config.ipc_port = std::to_string(randint(9999));
+
+		SOCKADDR_IN clientService;
+		clientService.sin_family = AF_INET;
+		clientService.sin_addr.s_addr = inet_addr(XorStr("127.0.0.1"));
+		clientService.sin_port = htons(std::stoi(this->base_config.ipc_port.c_str()));
+		SOCKET m_socket;
+		m_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+		if (m_socket == INVALID_SOCKET) 
+		{
+			dbglog(XorStr("[ opening socket [%s] failed => %ld ]\n"), this->base_config.ipc_port.c_str(), WSAGetLastError());
+			continue;
+		}
+		if (connect(m_socket, (SOCKADDR*)&clientService, sizeof(clientService)) != SOCKET_ERROR)
+		{
+			dbglog(XorStr("[ opening socket [%s] already used => %ld ]\n"), this->base_config.ipc_port.c_str(), WSAGetLastError());
+			continue;
+		}
+		closesocket(m_socket);
+		dbglog(XorStr("[ found available ipc port => %s ]\n"), this->base_config.ipc_port.c_str());
+		break;
+	}
 	dbglog(XorStr("[ ipc key : %s ]\n"), this->base_config.ipc_comkey.c_str());
 	dbglog(XorStr("[ ipc port: %s ]\n"), this->base_config.ipc_port.c_str());
 	this->save();
