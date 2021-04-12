@@ -4,7 +4,7 @@ namespace boot
 {
 	namespace conf_json
 	{
-		class c_conf
+		class c_config
 		{
 		public:
 			std::string		data_dir;	//path for map files, server configs, address dumps - passed to ingame bin post-inject
@@ -14,16 +14,17 @@ namespace boot
 			std::string		password;	//auth pass - xor by ipc_comkey
 			std::string		window_x;	//last exit pos
 			std::string		window_y;	//last exit pos
-			c_conf(const std::string a1, const std::string a2, const std::string a3, const std::string a4, const std::string a5, const std::string a6, const std::string a7) :
+			c_config() {}
+			c_config(const std::string a1, const std::string a2, const std::string a3, const std::string a4, const std::string a5, const std::string a6, const std::string a7) :
 				data_dir(a1), ipc_port(a2), ipc_comkey(a3), username(a4), password(a5), window_x(a6), window_y(a7)
 			{ }
-			NLOHMANN_DEFINE_TYPE_INTRUSIVE(c_conf, data_dir, ipc_port, ipc_comkey, username, password, window_x, window_y);
+			NLOHMANN_DEFINE_TYPE_INTRUSIVE(c_config, data_dir, ipc_port, ipc_comkey, username, password, window_x, window_y);
 		};
 	}
 	class c_conf : public s<c_conf>
 	{
 	public:
-		conf_json::c_conf	base_config;
+		conf_json::c_config	base_config;
 	public:
 		bool	save();
 		bool	load();

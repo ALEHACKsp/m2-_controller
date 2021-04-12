@@ -6,13 +6,15 @@ void boot::c_conf::setup()
 	util::c_log::Instance().duo(XorStr("[ base config load result > %s ]\n"), did_load ? "ok" : "failed");
 	if (!did_load)
 	{
-		//set data dir, port, ipc key
-		
+		//set data dir
+		const LPSTR self_name = {};
+		GetModuleFileNameA(GetModuleHandleA(0), self_name, MAX_PATH);
+		this->base_config.data_dir = self_name;
 	}
-	else
-	{
-		//re-randomize port, ipc key
-	}
+	//always rand
+	this->base_config.ipc_comkey = randstr(64);
+	this->base_config.ipc_port = randint(9999);
+	this->save();
 	vmend;
 }
 
@@ -41,7 +43,7 @@ bool boot::c_conf::load()
 	if (filebuf.empty()) return FALSE;
 	
 	auto jparse = nlohmann::json::parse(filebuf);
-	this->base_config = jparse.get<boot::conf_json::c_conf>();
+	this->base_config = jparse.get<boot::conf_json::c_config>();
 
 	bconf.close();
 
