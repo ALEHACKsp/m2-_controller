@@ -35,7 +35,7 @@ static auto rand_string(size_t c) -> const char*
 	return chr.c_str();
 }
 
-static auto rand_int(int maxnum = INT_MAX) -> int
+static auto rand_int(int maxnum = RAND_MAX) -> int
 {
 	auto ret = 0;
 
@@ -44,9 +44,23 @@ static auto rand_int(int maxnum = INT_MAX) -> int
 	
 	return ret;
 }
+static auto rand_ull(ULONGLONG maxnum = ULLONG_MAX) -> ULONGLONG
+{
+	ULONGLONG ret = 0;
+	
+	std::random_device rd;
+	std::mt19937_64 eng(rd() + (DWORD)GetTickCount64() + (DWORD)&ret + maxnum);
+	std::uniform_int_distribution<unsigned long long> distr;
+	
+	ret = distr(eng);
+
+	return ret;
+}
+
 
 #define randstr(chars)	rand_string(chars)
 #define randint(max)	rand_int(max)
+#define randull(max)	rand_ull(ULLONG_MAX)
 
 #if defined(_DEBUG) || defined(_LOG) == 1
 	#define dbglog(string, ...)  util::c_log::Instance().duo((string), ##__VA_ARGS__);

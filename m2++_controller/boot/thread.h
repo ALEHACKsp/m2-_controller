@@ -10,11 +10,15 @@ namespace boot
 	{
 		struct s_thread_i
 		{
-			s_thread_i(std::function<void()> &f, size_t &d) : func(f), interval(d)
+			s_thread_i(std::function<void(void* p)> f, size_t d) : func(f), interval(d)
 			{ }
-			std::function<void()>	func;
-			size_t					interval = 0;
-			ULONGLONG				last_exec = 0;
+			s_thread_i(std::function<void(void* p)> f, size_t d, ULONGLONG uid) : func(f), interval(d), uid(uid)
+			{ }
+			std::function<void(void* p)>	func;
+			size_t							interval = 0;
+			ULONGLONG						last_exec = 0;
+			//
+			ULONGLONG						uid = 0;
 		};
 	}
 	class c_thread : public s<c_thread>

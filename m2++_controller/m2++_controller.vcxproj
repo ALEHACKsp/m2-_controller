@@ -72,13 +72,13 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir)lib;$(ProjectDir)boot;$(ProjectDir)func;$(ProjectDir)util;$(ProjectDir)main;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)net;$(ProjectDir)lib;$(ProjectDir)boot;$(ProjectDir)func;$(ProjectDir)util;$(ProjectDir)main;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <GenerateManifest>false</GenerateManifest>
-    <IncludePath>$(ProjectDir)lib;$(ProjectDir)boot;$(ProjectDir)func;$(ProjectDir)util;$(ProjectDir)main;$(IncludePath)</IncludePath>
+    <IncludePath>$(ProjectDir)net;$(ProjectDir)lib;$(ProjectDir)boot;$(ProjectDir)func;$(ProjectDir)util;$(ProjectDir)main;$(IncludePath)</IncludePath>
     <LibraryPath>$(ProjectDir)lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -157,6 +157,7 @@
     <ClCompile Include="boot\config.cpp" />
     <ClCompile Include="boot\thread.cpp" />
     <ClCompile Include="main\core.cpp" />
+    <ClCompile Include="net\consock.cpp" />
     <ClCompile Include="util\log.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -165,6 +166,7 @@
     <ClInclude Include="lib\json.h" />
     <ClInclude Include="lib\vmp.h" />
     <ClInclude Include="main\inc.h" />
+    <ClInclude Include="net\consock.h" />
     <ClInclude Include="util\log.h" />
     <ClInclude Include="util\macro.h" />
     <ClInclude Include="util\macro_config.h" />

@@ -31,7 +31,7 @@ void boot::c_conf::setup()
 		SOCKADDR_IN clientService;
 		clientService.sin_family = AF_INET;
 		clientService.sin_addr.s_addr = inet_addr(XorStr("127.0.0.1"));
-		clientService.sin_port = htons(std::stoi(this->base_config.ipc_port.c_str()));
+		clientService.sin_port = htons(std::stoi(this->base_config.ipc_port));
 		SOCKET m_socket;
 		m_socket = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
 		if (m_socket == INVALID_SOCKET) 
@@ -41,7 +41,7 @@ void boot::c_conf::setup()
 		}
 		if (connect(m_socket, (SOCKADDR*)&clientService, sizeof(clientService)) != SOCKET_ERROR)
 		{
-			dbglog(XorStr("[ opening socket [%s] already used => %ld ]\n"), this->base_config.ipc_port.c_str(), WSAGetLastError());
+			dbglog(XorStr("[ socket [%s] already used => %ld ]\n"), this->base_config.ipc_port.c_str(), WSAGetLastError());
 			continue;
 		}
 		closesocket(m_socket);
@@ -50,7 +50,9 @@ void boot::c_conf::setup()
 	}
 	dbglog(XorStr("[ ipc key : %s ]\n"), this->base_config.ipc_comkey.c_str());
 	dbglog(XorStr("[ ipc port: %s ]\n"), this->base_config.ipc_port.c_str());
+	
 	this->save();
+	
 	vmend;
 }
 

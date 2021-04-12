@@ -13,6 +13,8 @@
 #include <thread>
 #include <functional>
 #include <WinInet.h>
+#include <random>
+#include <limits>
 //
 using namespace std::chrono;
 //
@@ -28,4 +30,5 @@ using namespace std::chrono;
 #include <json.h>
 #include <log.h>
 #include <config.h>
+#include <consock.h>
 #include <thread.h>

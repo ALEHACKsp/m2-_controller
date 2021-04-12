@@ -3,10 +3,12 @@
 void __stdcall boot::thread_ext::setup()
 {
 	uvirt;
+	
 	SetConsoleTitleA(randstr(20));
 	
 	util::c_log::Instance().setup();
-	boot::c_conf::Instance().setup();	
+	boot::c_conf::Instance().setup();
+	net::c_consock::Instance().setup();
 	
 	vmend;
 }
@@ -35,7 +37,7 @@ void boot::c_thread::work()
 			obj->last_exec = time + obj->interval;
 			try 
 			{
-				obj->func();
+				obj->func(&obj->uid);
 			}
 			catch (std::exception &e)
 			{

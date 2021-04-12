@@ -27,6 +27,9 @@
     <ClCompile Include="boot\config.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="net\consock.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main\inc.h">
@@ -57,6 +60,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="util\macro_config.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="net\consock.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
