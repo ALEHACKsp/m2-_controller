@@ -49,7 +49,7 @@ static auto rand_ull(ULONGLONG maxnum = ULLONG_MAX) -> ULONGLONG
 	ULONGLONG ret = 0;
 	
 	std::random_device rd;
-	std::mt19937_64 eng(rd() + (DWORD)GetTickCount64() + (DWORD)&ret + maxnum);
+	std::mt19937_64 eng(rd() + (DWORD)&ret);
 	std::uniform_int_distribution<unsigned long long> distr;
 	
 	ret = distr(eng);

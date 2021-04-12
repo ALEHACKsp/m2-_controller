@@ -33,5 +33,6 @@ namespace boot
 		void		setup();
 		void		work();
 		bool		add(thread_strc::s_thread_i* t);
+		bool		destroy(ULONGLONG uid);
 	};
 }

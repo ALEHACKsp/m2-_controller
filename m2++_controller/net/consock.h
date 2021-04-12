@@ -26,5 +26,6 @@ namespace net
 	public:
 		bool	setup();
 		void	connector();
+		bool	destroy(ULONGLONG uid);
 	};
 }

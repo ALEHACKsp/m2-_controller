@@ -56,3 +56,20 @@ bool boot::c_thread::add(thread_strc::s_thread_i* t)
 	vmend;
 	return true;	
 }
+
+bool boot::c_thread::destroy(ULONGLONG uid)
+{
+	uvirt;
+
+	for (size_t i = 0; i < this->pool.size(); i++)
+	{
+		auto obj = this->pool[i];
+		if (!obj || obj->uid != uid) continue;
+		this->pool.erase(this->pool.begin() + i);
+		delete obj;
+		break;
+	}
+
+	vmend;	
+	return true;
+}
