@@ -10,18 +10,18 @@ namespace boot
 	{
 		struct s_thread_i
 		{
-			s_thread_i(std::function<void(void* p)> f, size_t d) : func(f), interval(d)
+			s_thread_i(std::function<void(ULONGLONG p)> f, size_t d) : func(f), interval(d)
 			{ }
-			s_thread_i(std::function<void(void* p)> f, size_t d, ULONGLONG uid) : func(f), interval(d), uid(uid)
+			s_thread_i(std::function<void(ULONGLONG p)> f, size_t d, ULONGLONG uid) : func(f), interval(d), uid(uid)
 			{ }
-			s_thread_i(std::function<void(void* p)> f, size_t d, ULONGLONG uid, SOCKET sock) : func(f), interval(d), uid(uid), sock_to_client(sock)
+			s_thread_i(std::function<void(ULONGLONG p)> f, size_t d, ULONGLONG uid, ASocket::Socket sock) : func(f), interval(d), uid(uid), sock_to_client(sock)
 			{ }
-			std::function<void(void* p)>	func;
+			std::function<void(ULONGLONG p)>func;
 			size_t							interval = 0;
 			ULONGLONG						last_exec = 0;
 			//
 			ULONGLONG						uid = 0;
-			SOCKET							sock_to_client = 0;
+			ASocket::Socket					sock_to_client = 0;
 		};
 	}
 	class c_thread : public s<c_thread>

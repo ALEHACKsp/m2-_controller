@@ -24,14 +24,5 @@ using namespace std::chrono;
 #pragma comment(lib, "Ws2_32.lib")
 #pragma comment (lib, "wininet.lib")
 //
-#include <XorStr.h>
-#include <vmp.h>
-#include <macro_config.h>
-#include <macro.h>
-#include <json.h>
-#include <log.h>
-#include <config.h>
-#include <TCPServer.h>
-#include <fs_packets.h>
-#include <consock.h>
-#include <thread.h>
+#include <Socket.h>
+#include <TCPClient.h>

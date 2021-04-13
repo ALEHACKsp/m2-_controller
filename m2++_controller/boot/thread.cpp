@@ -33,11 +33,11 @@ void boot::c_thread::work()
 		const auto time = GetTickCount64();
 		for (auto&& obj : this->pool)
 		{
-			if (obj->last_exec + obj->interval < time) continue;
+			if (obj->last_exec > time) continue;
 			obj->last_exec = time + obj->interval;
 			try 
 			{
-				obj->func(&obj->uid);
+				obj->func(obj->uid);
 			}
 			catch (std::exception &e)
 			{

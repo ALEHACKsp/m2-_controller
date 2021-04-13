@@ -1,34 +1,17 @@
 #include "consock.h"
-
 bool net::c_consock::init_port()
 {
-	uvirt;	
-	SOCKADDR_IN clientService;
-	clientService.sin_family = AF_INET;
-	clientService.sin_addr.s_addr = inet_addr(XorStr("127.0.0.1"));
-	clientService.sin_port = htons(std::stoi(boot::c_conf::Instance().base_config.ipc_port));
-
-	this->ipc_sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
-	if (this->ipc_sock == INVALID_SOCKET)
-	{
-		closesocket(this->ipc_sock);
-		dbglog(XorStr("[ opening socket [%s] failed => %ld ]\n"), boot::c_conf::Instance().base_config.ipc_port.c_str(), WSAGetLastError());
-		return false;
-	}
-	if (connect(this->ipc_sock, (SOCKADDR*)&clientService, sizeof(clientService)) != SOCKET_ERROR)
-	{
-		closesocket(this->ipc_sock);
-		dbglog(XorStr("[ socket [%s] already used => %ld ]\n"), boot::c_conf::Instance().base_config.ipc_port.c_str(), WSAGetLastError());
-		return false;
-	}
-	if (listen(this->ipc_sock, SOMAXCONN) == SOCKET_ERROR)
-	{
-		closesocket(this->ipc_sock);
-		dbglog(XorStr("[ failed listen for socket [%s] ]\n"), boot::c_conf::Instance().base_config.ipc_port.c_str());
-		return false;
-	}	
-	vmend;
+	this->server_instance = new CTCPServer(
+				[](const std::string msg) { dbglog(std::string(msg).append("\n").c_str()); }, 
+				boot::c_conf::Instance().base_config.ipc_port);
+	
 	return true;
+}
+
+net::consock_strc::s_connection* net::c_consock::get(ULONGLONG uid)
+{
+	for (auto&& a : this->connections) if (a->identity == uid) return a;
+	return nullptr;
 }
 
 bool net::c_consock::setup()
@@ -39,10 +22,14 @@ bool net::c_consock::setup()
 		dbglog(XorStr("[ ipc port init failed ]\n"));
 		return false;
 	}
-	boot::c_thread::Instance().add(new boot::thread_strc::s_thread_i(([this](void* data)
-		{
-			net::c_consock::Instance().connector();//to execute the connection acceptor
-		}), 0, 0));
+	auto t = std::thread([]()
+	{
+		uvirt;
+		while (true) net::c_consock::Instance().connector();
+		vmend;
+	});
+	this->connector_thread = &t;
+	this->connector_thread->detach();
 	dbglog(XorStr("[ ipc port init completed, routine regsitered ]\n"));
 	vmend;
 	return true;
@@ -51,8 +38,11 @@ bool net::c_consock::setup()
 void net::c_consock::connector()
 {
 	uvirt;
-	SOCKET client_socket;
-	if ((client_socket = accept(this->ipc_sock, NULL, NULL))) 
+
+	dbglog(XorStr("[ waiting for connections ... ]\n"));
+
+	ASocket::Socket client_socket = 0;
+	if (this->server_instance->Listen(client_socket) && client_socket != INVALID_SOCKET)
 	{
 		auto construct = new net::consock_strc::s_connection();
 		//check for unique
@@ -68,14 +58,45 @@ void net::c_consock::connector()
 			}
 			if (!matched) break;
 		}
+		construct->socket = client_socket;
 		net::c_consock::Instance().connections.push_back(construct);
-		dbglog(XorStr("[ new bot joined, identity: %ull ]\n"), construct->identity);
-		boot::c_thread::Instance().add(new boot::thread_strc::s_thread_i(([this](void* data)
+		
+		dbglog(XorStr("[ new bot joined, identity: %llu, %04x ]\n"), construct->identity, (uint32_t)client_socket);
+
+		auto exch_packet = FS_packets::s_exch();
+		exch_packet.opcode = FS_packets::OP_EXCH;
+		exch_packet.size = sizeof(decltype(exch_packet));
+		strcpy(exch_packet.ipc_key, boot::c_conf::Instance().base_config.ipc_comkey.c_str());
+		//send initial exch
+		char as_dat[sizeof exch_packet];
+		memcpy(as_dat, &exch_packet, sizeof exch_packet);
+		auto exch_res = this->server_instance->Send(client_socket, as_dat, sizeof as_dat);
+		dbglog(XorStr("[ exch send: %i ]\n"), exch_res);
+		
+		boot::c_thread::Instance().add(new boot::thread_strc::s_thread_i(([this, client_socket](ULONGLONG data)
 		{
-				auto const* identity = (int*)data;
+				auto client_identity = data;
 			
-				dbglog(XorStr("[ thread tick from identity: %ull ]\n"), identity);
-		}), 15, construct->identity, client_socket));
+				//char send_dat[256];
+				//strcpy(send_dat, "test message FROM SRV");
+			
+				//auto send_ret = this->server_instance->Send(client_socket, send_dat, 256);
+				//if (!send_ret)
+				//{
+				//	this->destroy(client_identity);
+				//	return;
+				//}
+
+				////TODO: for packet system, gather header of packet (static header: short=opcode, short=packet size) adjust buffer based on this
+			
+				//char buf[256];
+				//auto bytes_rcv = this->server_instance->Receive(client_socket, buf, 256);
+			
+				//if (bytes_rcv <= 0) return;			
+			
+				//dbglog(XorStr("[ rcv from %llu, %s ]\n"), client_identity, buf);
+
+		}), 0, construct->identity, client_socket));
 	}
 	vmend;
 }
@@ -89,7 +110,7 @@ bool net::c_consock::destroy(ULONGLONG uid)
 		if (!obj || obj->identity != uid) continue;
 		this->connections.erase(this->connections.begin() + i);
 		delete obj;
-		dbglog(XorStr("[ dropped connection of client %ull ]\n"), uid);
+		dbglog(XorStr("[ dropped connection of client %08x ]\n"), uid);
 		break;
 	}
 

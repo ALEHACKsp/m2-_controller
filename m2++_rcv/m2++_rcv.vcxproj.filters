@@ -18,16 +18,7 @@
     <ClCompile Include="main\core.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="boot\thread.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="util\log.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="boot\config.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
-    <ClCompile Include="net\consock.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="lib\SecureSocket.cpp">
@@ -50,37 +41,13 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="main\inc.h">
+    <ClInclude Include="util\log.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="util\singleton.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="boot\thread.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="util\log.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="util\XorStr.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="lib\json.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="lib\vmp.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="util\macro.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="boot\config.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="util\macro_config.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="net\consock.h">
+    <ClInclude Include="main\inc.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="lib\TCPSSLServer.h">
@@ -99,9 +66,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="lib\TCPSSLClient.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="net\fs_packets.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
