@@ -164,6 +164,7 @@
     <ClCompile Include="lib\TCPSSLServer.cpp" />
     <ClCompile Include="main\core.cpp" />
     <ClCompile Include="net\consock.cpp" />
+    <ClCompile Include="net\packet_handler.cpp" />
     <ClCompile Include="util\log.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -179,7 +180,9 @@
     <ClInclude Include="lib\vmp.h" />
     <ClInclude Include="main\inc.h" />
     <ClInclude Include="net\consock.h" />
+    <ClInclude Include="net\fc_packets.h" />
     <ClInclude Include="net\fs_packets.h" />
+    <ClInclude Include="net\packet_handler.h" />
     <ClInclude Include="util\log.h" />
     <ClInclude Include="util\macro.h" />
     <ClInclude Include="util\macro_config.h" />

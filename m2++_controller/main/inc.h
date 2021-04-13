@@ -33,5 +33,6 @@ using namespace std::chrono;
 #include <config.h>
 #include <TCPServer.h>
 #include <fs_packets.h>
+#include <fc_packets.h>
 #include <consock.h>
 #include <thread.h>

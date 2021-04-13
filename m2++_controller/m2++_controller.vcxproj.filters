@@ -48,6 +48,9 @@
     <ClCompile Include="lib\TCPSSLServer.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="net\packet_handler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main\inc.h">
@@ -102,6 +105,12 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="net\fs_packets.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="net\packet_handler.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="net\fc_packets.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

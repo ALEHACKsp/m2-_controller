@@ -24,7 +24,7 @@ namespace net
 
 		struct s_ping : s_header
 		{
-			char			ping[4 + 1] = "ping";
+			char			ping[4 + 1] = "<>";
 		};		
 	}
 }

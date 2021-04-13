@@ -5716,7 +5716,7 @@ namespace nlohmann
             {
                 JSON_ASSERT(!keep_stack.empty());
 
-                // do not handle this value if we know it would be added to a discarded
+                // do not fc_handler this value if we know it would be added to a discarded
                 // container
                 if (!keep_stack.back())
                 {
@@ -5729,7 +5729,7 @@ namespace nlohmann
                 // check callback
                 const bool keep = skip_callback || callback(static_cast<int>(ref_stack.size()), parse_event_t::value, value);
 
-                // do not handle this value if we just learnt it shall be discarded
+                // do not fc_handler this value if we just learnt it shall be discarded
                 if (!keep)
                 {
                     return { false, nullptr };

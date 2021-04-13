@@ -61,6 +61,7 @@ static auto rand_ull(ULONGLONG maxnum = ULLONG_MAX) -> ULONGLONG
 #define randstr(chars)	rand_string(chars)
 #define randint(max)	rand_int(max)
 #define randull(max)	rand_ull(ULLONG_MAX)
+#define vartostr(var)	#var
 
 #if defined(_DEBUG) || _LOG == 1
 	#define dbglog(string, ...)  util::c_log::Instance().duo((string), ##__VA_ARGS__);
