@@ -382,7 +382,7 @@ int CTCPServer::Receive(const CTCPServer::Socket ClientSocket,
 
 		total += nRecvd;
 
-	} while (bReadFully && (total < uSize));
+	} while (bReadFully && ((size_t)total < uSize));
 
 	return total;
 }
@@ -405,7 +405,7 @@ bool CTCPServer::Send(const Socket ClientSocket, const char* pData, size_t uSize
 			return false;
 		}
 		total += nSent;
-	} while (total < uSize);
+	} while ((size_t)total < uSize);
 
 	return true;
 }

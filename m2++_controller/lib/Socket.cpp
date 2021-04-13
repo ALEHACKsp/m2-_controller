@@ -37,8 +37,6 @@ ASocket::ASocket(const LogFnCallback& oLogger,
       // MAKEWORD(2,2) version 2.2 of Winsock
       if (iWinSockInitResult != 0)
       {
-         if (m_eSettingsFlags & ENABLE_LOG)
-            m_oLog(StringFormat("[TCPClient][Error] WSAStartup failed : %d", iWinSockInitResult));
       }
 #endif
    }

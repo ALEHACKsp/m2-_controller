@@ -3,7 +3,7 @@ bool net::c_consock::init_port()
 {
 	this->server_instance = new CTCPServer(
 				[](const std::string msg) { dbglog(std::string(msg).append("\n").c_str()); }, 
-				boot::c_conf::Instance().base_config.ipc_port);
+				boot::c_conf::Instance().base_config.ipc_port, ASocket::NO_FLAGS);
 	
 	return true;
 }
@@ -71,30 +71,32 @@ void net::c_consock::connector()
 		char as_dat[sizeof exch_packet];
 		memcpy(as_dat, &exch_packet, sizeof exch_packet);
 		auto exch_res = this->server_instance->Send(client_socket, as_dat, sizeof as_dat);
-		dbglog(XorStr("[ exch send: %i ]\n"), exch_res);
+		dbglog(XorStr("[ initial data exchanged => %i ]\n"), exch_res);
 		
 		boot::c_thread::Instance().add(new boot::thread_strc::s_thread_i(([this, client_socket](ULONGLONG data)
 		{
 				auto client_identity = data;
-			
-				//char send_dat[256];
-				//strcpy(send_dat, "test message FROM SRV");
-			
-				//auto send_ret = this->server_instance->Send(client_socket, send_dat, 256);
-				//if (!send_ret)
-				//{
-				//	this->destroy(client_identity);
-				//	return;
-				//}
 
-				////TODO: for packet system, gather header of packet (static header: short=opcode, short=packet size) adjust buffer based on this
+				auto ping_packet = FS_packets::s_ping();
+				ping_packet.opcode = FS_packets::OP_PING;
+				ping_packet.size = sizeof(decltype(ping_packet));
+
+				char as_dat[sizeof ping_packet];
+				memcpy(as_dat, &ping_packet, sizeof ping_packet);
+
+				auto ping_ret = this->server_instance->Send(client_socket, as_dat, sizeof as_dat);
+				if (!ping_ret)
+				{
+					this->destroy(client_identity);
+					return;
+				}				
 			
-				//char buf[256];
-				//auto bytes_rcv = this->server_instance->Receive(client_socket, buf, 256);
+				/*char buf[256];
+				auto bytes_rcv = this->server_instance->Receive(client_socket, buf, 256);
 			
-				//if (bytes_rcv <= 0) return;			
+				if (bytes_rcv <= 0) return;			
 			
-				//dbglog(XorStr("[ rcv from %llu, %s ]\n"), client_identity, buf);
+				dbglog(XorStr("[ rcv from %llu, %s ]\n"), client_identity, buf);*/
 
 		}), 0, construct->identity, client_socket));
 	}

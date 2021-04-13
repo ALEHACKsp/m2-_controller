@@ -281,7 +281,7 @@ bool CTCPClient::Send(const char* pData, const size_t uSize) const
          return false;
       }
       total += nSent;
-   } while(total < uSize);
+   } while((size_t)total < uSize);
    
    return true;
 }
@@ -348,7 +348,7 @@ int CTCPClient::Receive(char* pData, const size_t uSize, bool bReadFully /*= tru
 
       total += nRecvd;
 
-   } while (bReadFully && (total < uSize));
+   } while (bReadFully && ((size_t)total < uSize));
    
    return total;
 }

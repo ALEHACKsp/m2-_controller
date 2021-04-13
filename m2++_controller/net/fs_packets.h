@@ -8,7 +8,8 @@ namespace net
 		enum
 		{
 			OP_INVALID = 0,
-			OP_EXCH
+			OP_EXCH,
+			OP_PING
 		};
 		struct s_header
 		{
@@ -20,5 +21,10 @@ namespace net
 		{
 			char			ipc_key[64+1] = "<empty>";
 		};
+
+		struct s_ping : s_header
+		{
+			char			ping[4 + 1] = "ping";
+		};		
 	}
 }

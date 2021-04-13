@@ -164,7 +164,7 @@ int ASocket::SelectSockets(const ASocket::Socket* pSocketsToSelect, const size_t
    {
       FD_SET(pSocketsToSelect[i], &rset);
 
-      if (pSocketsToSelect[i] > max_fd)
+      if (pSocketsToSelect[i] > (size_t)max_fd)
       {
          max_fd = pSocketsToSelect[i];
       }
