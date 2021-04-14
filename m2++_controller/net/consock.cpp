@@ -65,45 +65,33 @@ void net::c_consock::connector()
 		net::c_consock::Instance().connections.push_back(construct);
 		
 		dbglog(XorStr("[ new bot joined, identity: %llu, %04x ]\n"), construct->identity, (uint32_t)client_socket);
-		//TODO:: give bot identity in exch
-		auto exch_packet = FS_packets::s_exch();
-		exch_packet.opcode = FS_packets::OP_EXCH;
-		exch_packet.size = sizeof(decltype(exch_packet));
-		strcpy(exch_packet.ipc_key, boot::c_conf::Instance().base_config.ipc_comkey.c_str());
-		//send initial exch
-		char as_dat[sizeof exch_packet];
-		memcpy(as_dat, &exch_packet, sizeof exch_packet);
-		auto exch_res = this->server_instance->Send(client_socket, as_dat, sizeof as_dat);
-		dbglog(XorStr("[ initial data exchanged => %i ]\n"), exch_res);
+
+		auto exch_packet = FS_packets::s_exch(boot::c_conf::Instance().base_config.ipc_comkey.c_str());
+		auto as_dat = net::c_packet::Instance().craft<FS_packets::s_exch>((void*)&exch_packet);
+		const auto exch_res = this->server_instance->Send(client_socket, &as_dat[0], exch_packet.size);
+
+		auto ident_packet = FS_packets::s_ident(construct->identity);
+		auto ident_dat = net::c_packet::Instance().craft<FS_packets::s_ident>((void*)&ident_packet);
+		const auto ident_res = this->server_instance->Send(client_socket, &ident_dat[0], ident_packet.size);
 		
-		boot::c_thread::Instance().add(new boot::thread_strc::s_thread_i(([this, client_socket](ULONGLONG data)
+		boot::c_thread::Instance().indep(new boot::thread_strc::s_thread_i(([this, client_socket](ULONGLONG data)
 		{
-				auto client_identity = data;
+				const auto client_identity = data;
 
 				auto ping_packet = FS_packets::s_ping();
-				ping_packet.opcode = FS_packets::OP_PING;
-				ping_packet.size = sizeof(decltype(ping_packet));
+				auto as_dat = net::c_packet::Instance().craft<FS_packets::s_ping>((void*)&ping_packet);
 
-				char as_dat[sizeof ping_packet];
-				memcpy(as_dat, &ping_packet, sizeof ping_packet);
-
-				auto ping_ret = this->server_instance->Send(client_socket, as_dat, sizeof as_dat);
+				const auto ping_ret = this->server_instance->Send(client_socket, &as_dat[0], ping_packet.size);
 				if (!ping_ret)
 				{
 					this->destroy(client_identity);
+					ExitThread(0);
 					return;
 				}
 
 				net::c_packet::Instance().fc_handler(client_identity, client_socket);
-			
-				/*char buf[256];
-				auto bytes_rcv = this->server_instance->Receive(client_socket, buf, 256);
-			
-				if (bytes_rcv <= 0) return;			
-			
-				dbglog(XorStr("[ rcv from %llu, %s ]\n"), client_identity, buf);*/
 
-		}), 100, construct->identity, client_socket));
+		}), 50, construct->identity, client_socket));
 	}
 	vmend;
 }

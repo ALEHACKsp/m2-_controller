@@ -15,7 +15,7 @@ bool net::c_packet::fc_handler(ULONGLONG uid, ASocket::Socket sock)
 		if (header.opcode > FC_packets::OP_MAX) return false;
 		if (header.opcode == FC_packets::OP_PING)
 		{
-			dbglog(XorStr("[ ( --> ) header: %s, size: %i ]\n"), vartostr(FC_packets::OP_PING), header.size);
+			//dbglog(XorStr("[ ( --> ) header: %s, size: %i ]\n"), vartostr(FC_packets::OP_PING), header.size);
 			auto ping_dat = this->rcv_data<FC_packets::s_ping>(sock);
 			if (ping_dat.first > 0)
 			{
@@ -30,6 +30,5 @@ bool net::c_packet::fc_handler(ULONGLONG uid, ASocket::Socket sock)
 
 bool net::c_packet::setup()
 {
-
 	return true;
 }

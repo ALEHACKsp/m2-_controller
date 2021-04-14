@@ -1,5 +1,7 @@
 #include "thread.h"
 
+#include <thread>
+
 void __stdcall boot::thread_ext::setup()
 {
 	uvirt;
@@ -57,6 +59,31 @@ bool boot::c_thread::add(thread_strc::s_thread_i* t)
 	return true;	
 }
 
+bool boot::c_thread::indep(thread_strc::s_thread_i* t)
+{
+	uvirt;
+	auto th = std::thread([t]()
+	{
+			while (true)
+			{
+				try 
+				{
+					if (!t->func) break;
+					t->func(t->uid);
+				}
+				catch (std::exception &e)
+				{
+					dbglog(XorStr("[ function %04x failed: %s ]\n"), e.what());
+				}
+			}
+	});
+	t->thread = &th;
+	t->thread->detach();
+	this->indep_pool.push_back(t);
+	vmend;
+	return true;
+}
+
 bool boot::c_thread::destroy(ULONGLONG uid)
 {
 	uvirt;
@@ -69,7 +96,15 @@ bool boot::c_thread::destroy(ULONGLONG uid)
 		delete obj;
 		break;
 	}
-
+	for (size_t i = 0; i < this->indep_pool.size(); i++)
+	{
+		auto obj = this->indep_pool[i];
+		if (!obj || obj->uid != uid) continue;
+		this->indep_pool.erase(this->indep_pool.begin() + i);
+		delete obj;
+		break;
+	}
+	
 	vmend;	
 	return true;
 }

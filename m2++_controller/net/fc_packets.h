@@ -12,12 +12,12 @@ namespace net
 		};
 		struct s_header
 		{
-			short	opcode = OP_INVALID;
-			short	size = 0;
+			int			opcode = OP_INVALID;
+			int			size = 0;
 		};
-		struct s_ping
+		struct s_ping 
 		{
-			char	message[64 + 1];
+			char		message[64 + 1];
 		};
 	}
 }
