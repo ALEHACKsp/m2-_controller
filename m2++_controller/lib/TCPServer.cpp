@@ -31,7 +31,7 @@ CTCPServer::CTCPServer(const LogFnCallback oLogger,
 	* address structure in a call to the bind function.*/
 	m_HintsAddrInfo.ai_flags = AI_PASSIVE;
 
-	int iResult = getaddrinfo(nullptr, strPort.c_str(), &m_HintsAddrInfo, &m_pResultAddrInfo);
+	auto iResult = getaddrinfo(nullptr, strPort.c_str(), &m_HintsAddrInfo, &m_pResultAddrInfo);
 	if (iResult != 0)
 	{
 	   if (m_pResultAddrInfo != nullptr)

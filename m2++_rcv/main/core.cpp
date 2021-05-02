@@ -109,7 +109,7 @@ int main()
 	util::c_log::Instance().duo("[ starting rcv client ]\n");
 
 	auto tcp_client = new CTCPClient([](std::string msg) { printf(msg.append("\n").c_str()); }, ASocket::NO_FLAGS);
-	tcp_client->Connect("127.0.0.1", "669");
+	tcp_client->Connect("127.0.0.1", "5373");
 
 	std::thread rcv(rcv_thread, tcp_client);
 	rcv.detach();
