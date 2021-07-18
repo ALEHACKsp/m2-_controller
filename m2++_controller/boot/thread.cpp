@@ -11,6 +11,10 @@ void __stdcall boot::thread_ext::setup()
 	util::c_log::Instance().setup();
 	boot::c_conf::Instance().setup();
 	net::c_consock::Instance().setup();
+
+	//ui cba
+
+	
 	
 	vmend;
 }

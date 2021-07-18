@@ -16,13 +16,16 @@
 #include <WinInet.h>
 #include <random>
 #include <limits>
+#include <windowsx.h>
+#include <shellapi.h>
 //
 using namespace std::chrono;
 //
 #include <singleton.h>
 //
 #pragma comment(lib, "Ws2_32.lib")
-#pragma comment (lib, "wininet.lib")
+#pragma comment(lib, "wininet.lib")
+#pragma comment(lib, "GuiLite.lib")
 //
 #include <XorStr.h>
 #include <vmp.h>
@@ -35,4 +38,5 @@ using namespace std::chrono;
 #include <fs_packets.h>
 #include <fc_packets.h>
 #include <consock.h>
+#include <interface.h>
 #include <thread.h>

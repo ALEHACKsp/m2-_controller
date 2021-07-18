@@ -72,14 +72,14 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>$(ProjectDir)net;$(ProjectDir)lib;$(ProjectDir)boot;$(ProjectDir)func;$(ProjectDir)util;$(ProjectDir)main;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)agar;$(ProjectDir)ui;$(ProjectDir)net;$(ProjectDir)lib;$(ProjectDir)boot;$(ProjectDir)func;$(ProjectDir)util;$(ProjectDir)main;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)ui;$(ProjectDir)lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
     <GenerateManifest>false</GenerateManifest>
-    <IncludePath>$(ProjectDir)net;$(ProjectDir)lib;$(ProjectDir)boot;$(ProjectDir)func;$(ProjectDir)util;$(ProjectDir)main;$(IncludePath)</IncludePath>
-    <LibraryPath>$(ProjectDir)lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>$(ProjectDir)agar;$(ProjectDir)ui;$(ProjectDir)net;$(ProjectDir)lib;$(ProjectDir)boot;$(ProjectDir)func;$(ProjectDir)util;$(ProjectDir)main;$(IncludePath)</IncludePath>
+    <LibraryPath>$(ProjectDir)ui;$(ProjectDir)lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -165,6 +165,7 @@
     <ClCompile Include="main\core.cpp" />
     <ClCompile Include="net\consock.cpp" />
     <ClCompile Include="net\packet_handler.cpp" />
+    <ClCompile Include="ui\interface.cpp" />
     <ClCompile Include="util\log.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -183,6 +184,7 @@
     <ClInclude Include="net\fc_packets.h" />
     <ClInclude Include="net\fs_packets.h" />
     <ClInclude Include="net\packet_handler.h" />
+    <ClInclude Include="ui\interface.h" />
     <ClInclude Include="util\log.h" />
     <ClInclude Include="util\macro.h" />
     <ClInclude Include="util\macro_config.h" />
